@@ -9,7 +9,11 @@ app.use(express.json())
 app.post('/log', async (req, res) => {
     const result = await publish.publisherMessage(req.body.message)
     let result2 = await publish.consumeData()
-    res.status(result[1]).json({ message: result[0], data: result2 })
+    if (result[0] === 400) {
+        res.status(result[1]).json({ message: result[0] })
+    } else {
+        res.status(result[1]).json({ message: result[0], data: result2 })
+    }
 })
 
 app.listen(8000, () => {
